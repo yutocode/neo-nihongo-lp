@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NEO NIHONGO ACADEMY | Learn Japanese, Future-Ready</title>
+    <meta
+      name="description"
+      content="海外学習者向けオンライン日本語スクール。無料レベル診断（3分）＆無料体験。会話・発音・JLPT・仕事日本語を、楽しく継続できる仕組みで。"
+    />
+
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      :root {
+        --bg0: #050712;
+        --bg1: #070a1a;
+        --glass: rgba(255, 255, 255, 0.08);
+        --glass2: rgba(255, 255, 255, 0.12);
+        --stroke: rgba(255, 255, 255, 0.12);
+        --stroke2: rgba(255, 255, 255, 0.18);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.72);
+        --muted2: rgba(255, 255, 255, 0.55);
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+        --shadow2: 0 18px 60px rgba(0, 0, 0, 0.55);
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+        --neon: #7c3aed; /* violet */
+        --neon2: #22d3ee; /* cyan */
+        --neon3: #60a5fa; /* blue */
+        --ring: rgba(34, 211, 238, 0.55);
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        color: var(--text);
+        background: radial-gradient(
+            1200px 700px at 20% 10%,
+            rgba(124, 58, 237, 0.35),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 700px at 80% 20%,
+            rgba(34, 211, 238, 0.22),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 600px at 50% 90%,
+            rgba(96, 165, 250, 0.18),
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--bg0), var(--bg1) 60%, #040513);
+        overflow-x: hidden;
+      }
+
+      /* Grain overlay (noise) */
+      .grain::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.12;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+        background-size: 260px 260px;
+        transform: translateZ(0);
+      }
+
+      /* Glass card */
+      .glass {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.11),
+          rgba(255, 255, 255, 0.06)
+        );
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+
+      .glass-strong {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.14),
+          rgba(255, 255, 255, 0.07)
+        );
+        border: 1px solid var(--stroke2);
+        box-shadow: var(--shadow2);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      /* Subtle highlight border */
+      .edge-glow {
+        position: relative;
+      }
+      .edge-glow::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          135deg,
+          rgba(34, 211, 238, 0.5),
+          rgba(124, 58, 237, 0.4),
+          rgba(96, 165, 250, 0.35)
+        );
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        mask-composite: exclude;
+        -webkit-mask-composite: xor;
+        opacity: 0.65;
+        pointer-events: none;
+      }
+
+      /* Fade-in up (IntersectionObserver adds .in) */
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+        will-change: opacity, transform;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Micro interactions */
+      .btn-neon {
+        position: relative;
+        transition: transform 220ms var(--ease), box-shadow 220ms var(--ease),
+          background 220ms var(--ease), border-color 220ms var(--ease);
+      }
+      .btn-neon::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: inherit;
+        background: radial-gradient(
+          60% 120% at 30% 20%,
+          rgba(34, 211, 238, 0.55),
+          transparent 60%
+        ),
+          radial-gradient(
+            70% 120% at 80% 30%,
+            rgba(124, 58, 237, 0.5),
+            transparent 60%
+          );
+        filter: blur(16px);
+        opacity: 0;
+        transition: opacity 220ms var(--ease);
+        pointer-events: none;
+      }
+      .btn-neon:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+      }
+      .btn-neon:hover::before {
+        opacity: 1;
+      }
+      .btn-neon:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      .card-tilt {
+        transition: transform 260ms var(--ease), box-shadow 260ms var(--ease),
+          border-color 260ms var(--ease);
+        transform-style: preserve-3d;
+      }
+      .card-tilt:hover {
+        transform: translateY(-3px) rotateX(1.2deg) rotateY(-1.2deg);
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.6);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      /* Focus ring (a11y) */
+      :focus-visible {
+        outline: 3px solid var(--ring);
+        outline-offset: 3px;
+        border-radius: 12px;
+      }
+
+      /* Hero background image overlay */
+      .hero-bg {
+        background-image: linear-gradient(
+            180deg,
+            rgba(5, 7, 18, 0.78),
+            rgba(5, 7, 18, 0.45) 60%,
+            rgba(5, 7, 18, 0.88)
+          ),
+          url("https://source.unsplash.com/2400x1400/?tokyo,neon,night");
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* Canvas sizing */
+      #cubeWrap {
+        width: min(520px, 92vw);
+        height: min(520px, 92vw);
+      }
+
+      @media (max-width: 640px) {
+        #cubeWrap {
+          width: 320px;
+          height: 320px;
+        }
+      }
+
+      /* FAQ accordion motion */
+      .faq-panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 260ms var(--ease);
+      }
+      .faq-item[data-open="true"] .faq-panel {
+        max-height: 340px;
+      }
+      .faq-item .chev {
+        transition: transform 220ms var(--ease);
+      }
+      .faq-item[data-open="true"] .chev {
+        transform: rotate(180deg);
+      }
+    </style>
+  </head>
+
+  <body class="grain antialiased">
+    <!-- Sticky Header -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+      <div class="mx-auto max-w-6xl px-4">
+        <div
+          class="mt-3 glass-strong edge-glow flex items-center justify-between rounded-2xl px-4 py-3"
+        >
+          <a
+            href="#top"
+            class="flex items-center gap-3"
+            aria-label="NEO NIHONGO ACADEMY ホームへ"
+          >
+            <div
+              class="h-9 w-9 rounded-xl bg-white/10 border border-white/15 grid place-items-center"
+              aria-hidden="true"
+            >
+              <span class="text-sm font-semibold tracking-wide">NN</span>
+            </div>
+            <div class="leading-tight">
+              <div class="text-sm font-semibold tracking-wide">
+                NEO NIHONGO ACADEMY
+              </div>
+              <div class="text-xs text-white/60">Future-ready Japanese</div>
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-6 text-sm text-white/70">
+            <a href="#features" class="hover:text-white transition">Features</a>
+            <a href="#courses" class="hover:text-white transition">Courses</a>
+            <a href="#reviews" class="hover:text-white transition">Reviews</a>
+            <a href="#pricing" class="hover:text-white transition">Pricing</a>
+            <a href="#faq" class="hover:text-white transition">FAQ</a>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <a
+              href="#diagnosis"
+              class="hidden sm:inline-flex btn-neon rounded-xl px-4 py-2 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+            >
+              無料レベル診断
+            </a>
+            <a
+              href="#trial"
+              class="btn-neon rounded-xl px-4 py-2 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/20 to-violet-400/20 hover:from-cyan-300/25 hover:to-violet-400/25"
+            >
+              無料体験
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <main id="top" class="pt-24">
+      <section class="hero-bg">
+        <div class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
+            <div class="lg:col-span-6 reveal">
+              <div
+                class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+              >
+                <span
+                  class="inline-block h-1.5 w-1.5 rounded-full bg-cyan-300"
+                  aria-hidden="true"
+                ></span>
+                AI-support / Data-driven / Community-first
+              </div>
+
+              <h1
+                class="mt-5 text-4xl sm:text-5xl font-semibold tracking-tight"
+              >
+                日本語が、
+                <span
+                  class="bg-gradient-to-r from-cyan-200 via-white to-violet-200 bg-clip-text text-transparent"
+                >
+                  未来のスキル
+                </span>
+                になる。
+              </h1>
+
+              <p class="mt-5 text-white/75 text-base sm:text-lg leading-relaxed">
+                海外学習者向けオンライン日本語スクール。
+                <span class="text-white/90 font-medium"
+                  >会話・発音・JLPT・仕事日本語</span
+                >
+                を、楽しく続く仕組みで。
+                <br class="hidden sm:block" />
+                まずは
+                <span class="text-white/90 font-medium"
+                  >無料レベル診断（3分）</span
+                >
+                で、あなたに最適な学習ルートを提案します。
+              </p>
+
+              <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="#diagnosis"
+                  class="btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/25 to-violet-400/25 hover:from-cyan-300/30 hover:to-violet-400/30"
+                >
+                  無料レベル診断（3分）
+                </a>
+                <a
+                  href="#trial"
+                  class="btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+                >
+                  無料体験を申し込む
+                </a>
+              </div>
+
+              <div class="mt-8 grid grid-cols-3 gap-3">
+                <div class="glass rounded-2xl px-4 py-3">
+                  <div class="text-xs text-white/60">Learners</div>
+                  <div class="text-lg font-semibold">12,480+</div>
+                </div>
+                <div class="glass rounded-2xl px-4 py-3">
+                  <div class="text-xs text-white/60">Retention</div>
+                  <div class="text-lg font-semibold">78%</div>
+                </div>
+                <div class="glass rounded-2xl px-4 py-3">
+                  <div class="text-xs text-white/60">Satisfaction</div>
+                  <div class="text-lg font-semibold">4.8/5</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3D Cube -->
+            <div class="lg:col-span-6 reveal">
+              <div
+                class="glass-strong edge-glow card-tilt relative rounded-3xl p-5 sm:p-7"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-sm font-semibold">NEON CUBE</div>
+                    <div class="text-xs text-white/60">
+                      cursor-follow • slow-rotate • lightweight
+                    </div>
+                  </div>
+                  <div
+                    class="text-xs text-white/70 rounded-full border border-white/15 bg-white/10 px-3 py-1"
+                  >
+                    Three.js
+                  </div>
+                </div>
+
+                <div
+                  class="mt-4 grid place-items-center"
+                  aria-label="ネオンキューブ（3D）"
+                >
+                  <div id="cubeWrap" class="relative">
+                    <canvas
+                      id="cubeCanvas"
+                      class="absolute inset-0"
+                      aria-hidden="true"
+                    ></canvas>
+                    <div
+                      class="absolute inset-0 rounded-3xl pointer-events-none"
+                      style="
+                        background: radial-gradient(
+                            60% 60% at 30% 30%,
+                            rgba(34, 211, 238, 0.16),
+                            transparent 60%
+                          ),
+                          radial-gradient(
+                            60% 60% at 70% 40%,
+                            rgba(124, 58, 237, 0.14),
+                            transparent 60%
+                          );
+                      "
+                    ></div>
+                  </div>
+                </div>
+
+                <div class="mt-5 grid gap-3 sm:grid-cols-2">
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="text-xs text-white/60">AI Support</div>
+                    <div class="mt-1 text-sm text-white/80">
+                      学習データから最短ルートを提案
+                    </div>
+                  </div>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="text-xs text-white/60">Community</div>
+                    <div class="mt-1 text-sm text-white/80">
+                      仲間と続く、会話中心の学習
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="mt-4 text-xs text-white/55">
+                ※画像はUnsplashの実在ランダム写真を使用しています。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bento Grid -->
+      <section id="features" class="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+        <div class="reveal">
+          <div class="flex items-end justify-between gap-6">
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+                Bento Features
+                <span class="text-white/60 font-normal">— すべてが続く設計</span>
+              </h2>
+              <p class="mt-3 text-white/70 leading-relaxed">
+                “楽しさ”と“実用性”を両立。毎日少しずつでも前に進めるように、UIと学習導線を最適化。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-8 grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+        >
+          <!-- Free Diagnosis (big) -->
+          <article
+            class="reveal glass-strong edge-glow card-tilt rounded-3xl p-6 lg:col-span-2 lg:row-span-2 overflow-hidden relative"
+          >
+            <div
+              class="absolute inset-0 opacity-40"
+              style="
+                background-image: linear-gradient(
+                    180deg,
+                    rgba(5, 7, 18, 0.75),
+                    rgba(5, 7, 18, 0.2)
+                  ),
+                  url('https://source.unsplash.com/1600x1000/?language-exchange,smiling');
+                background-size: cover;
+                background-position: center;
+              "
+              aria-hidden="true"
+            ></div>
+            <div class="relative">
+              <div
+                class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+              >
+                <span
+                  class="inline-block h-1.5 w-1.5 rounded-full bg-cyan-300"
+                  aria-hidden="true"
+                ></span>
+                Free Level Check • 3 min
+              </div>
+              <h3 class="mt-4 text-xl sm:text-2xl font-semibold">
+                無料レベル診断（3分）
+              </h3>
+              <p class="mt-3 text-white/75 leading-relaxed">
+                いまのレベル・目的・生活シーンから、あなたに合う学習ルートを提案。
+                <span class="text-white/90 font-medium"
+                  >今日から迷わず進めます。</span
+                >
+              </p>
+
+              <div class="mt-5 flex flex-wrap gap-2">
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >JLPT</span
+                >
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Conversation</span
+                >
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Pronunciation</span
+                >
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Business</span
+                >
+              </div>
+
+              <a
+                href="#diagnosis"
+                class="mt-6 inline-flex btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/25 to-violet-400/25 hover:from-cyan-300/30 hover:to-violet-400/30"
+              >
+                診断して提案を受け取る
+              </a>
+            </div>
+          </article>
+
+          <!-- Conversation class -->
+          <article class="reveal glass card-tilt rounded-3xl p-5 overflow-hidden">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">会話クラス（少人数）</h3>
+                <p class="mt-1 text-xs text-white/65">
+                  話けば話すほど、上達が早い。
+                </p>
+              </div>
+              <span
+                class="text-[11px] text-white/70 rounded-full border border-white/15 bg-white/10 px-2 py-1"
+                >Live</span
+              >
+            </div>
+            <div class="mt-4 rounded-2xl overflow-hidden border border-white/10">
+              <img
+                src="https://source.unsplash.com/1200x900/?international-students,group-discussion"
+                alt="海外学習者が会話している写真"
+                class="h-40 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="mt-4 text-xs text-white/70 leading-relaxed">
+              毎回テーマが変わる。自然な相づち・言い換え・発音まで、実践で身につく。
+            </div>
+          </article>
+
+          <!-- JLPT roadmap -->
+          <article class="reveal glass card-tilt rounded-3xl p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">JLPT対策（N5〜N1）</h3>
+                <p class="mt-1 text-xs text-white/65">
+                  ロードマップで迷わない。
+                </p>
+              </div>
+              <span
+                class="text-[11px] text-white/70 rounded-full border border-white/15 bg-white/10 px-2 py-1"
+                >Path</span
+              >
+            </div>
+            <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="flex items-center justify-between text-xs text-white/70">
+                <span>Progress</span><span>62%</span>
+              </div>
+              <div class="mt-2 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  class="h-full w-[62%] rounded-full"
+                  style="
+                    background: linear-gradient(
+                      90deg,
+                      rgba(34, 211, 238, 0.9),
+                      rgba(124, 58, 237, 0.85)
+                    );
+                  "
+                ></div>
+              </div>
+              <div class="mt-3 grid grid-cols-5 gap-2 text-[11px] text-white/60">
+                <span class="rounded-lg border border-white/10 bg-white/5 px-2 py-1"
+                  >N5</span
+                >
+                <span
+                  class="rounded-lg border border-white/10 bg-white/5 px-2 py-1"
+                  >N4</span
+                >
+                <span
+                  class="rounded-lg border border-white/10 bg-white/5 px-2 py-1"
+                  >N3</span
+                >
+                <span
+                  class="rounded-lg border border-white/10 bg-white/5 px-2 py-1"
+                  >N2</span
+                >
+                <span
+                  class="rounded-lg border border-white/10 bg-white/5 px-2 py-1"
+                  >N1</span
+                >
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-white/70">
+              頻出ポイントだけを、短時間で反復。
+            </p>
+          </article>
+
+          <!-- Pronunciation -->
+          <article class="reveal glass card-tilt rounded-3xl p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">発音トレーニング</h3>
+                <p class="mt-1 text-xs text-white/65">波形UIで“見える化”。</p>
+              </div>
+              <span
+                class="text-[11px] text-white/70 rounded-full border border-white/15 bg-white/10 px-2 py-1"
+                >Voice</span
+              >
+            </div>
+
+            <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="flex items-center justify-between text-xs text-white/70">
+                <span>Pitch / Timing</span><span>Good</span>
+              </div>
+              <div class="mt-3 flex items-end gap-1.5 h-14">
+                <div class="w-2 rounded-full bg-cyan-300/60 h-4"></div>
+                <div class="w-2 rounded-full bg-cyan-300/70 h-7"></div>
+                <div class="w-2 rounded-full bg-violet-400/60 h-10"></div>
+                <div class="w-2 rounded-full bg-violet-400/70 h-6"></div>
+                <div class="w-2 rounded-full bg-blue-300/70 h-12"></div>
+                <div class="w-2 rounded-full bg-blue-300/60 h-8"></div>
+                <div class="w-2 rounded-full bg-cyan-300/70 h-11"></div>
+                <div class="w-2 rounded-full bg-violet-400/70 h-9"></div>
+              </div>
+              <div class="mt-3 text-xs text-white/60">
+                例）「よろしくお願いします」
+              </div>
+            </div>
+          </article>
+
+          <!-- Today words -->
+          <article class="reveal glass card-tilt rounded-3xl p-5 overflow-hidden">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">今日の単語（10個）</h3>
+                <p class="mt-1 text-xs text-white/65">毎日コツコツ、資産に。</p>
+              </div>
+              <span
+                class="text-[11px] text-white/70 rounded-full border border-white/15 bg-white/10 px-2 py-1"
+                >Daily</span
+              >
+            </div>
+
+            <div class="mt-4 grid gap-2">
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-semibold">約束</span>
+                  <span class="text-xs text-white/60">やくそく</span>
+                </div>
+                <div class="text-xs text-white/65 mt-1">promise / appointment</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm font-semibold">助かる</span>
+                  <span class="text-xs text-white/60">たすかる</span>
+                </div>
+                <div class="text-xs text-white/65 mt-1">to be saved / helpful</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Streak -->
+          <article class="reveal glass card-tilt rounded-3xl p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">学習ストリーク</h3>
+                <p class="mt-1 text-xs text-white/65">続けるほど強くなる。</p>
+              </div>
+              <span
+                class="text-[11px] text-white/70 rounded-full border border-white/15 bg-white/10 px-2 py-1"
+                >Streak</span
+              >
+            </div>
+            <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div class="flex items-end justify-between">
+                <div>
+                  <div class="text-xs text-white/60">Current</div>
+                  <div class="text-2xl font-semibold">19 days</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs text-white/60">XP</div>
+                  <div class="text-lg font-semibold">+240</div>
+                </div>
+              </div>
+              <div class="mt-4 grid grid-cols-7 gap-2">
+                <div class="h-2 rounded-full bg-cyan-300/70"></div>
+                <div class="h-2 rounded-full bg-cyan-300/60"></div>
+                <div class="h-2 rounded-full bg-violet-400/60"></div>
+                <div class="h-2 rounded-full bg-blue-300/60"></div>
+                <div class="h-2 rounded-full bg-cyan-300/70"></div>
+                <div class="h-2 rounded-full bg-violet-400/70"></div>
+                <div class="h-2 rounded-full bg-blue-300/70"></div>
+              </div>
+              <div class="mt-3 text-xs text-white/60">
+                週に1回の“復習デー”で忘れない。
+              </div>
+            </div>
+          </article>
+
+          <!-- Community (big) -->
+          <article
+            class="reveal glass-strong edge-glow card-tilt rounded-3xl p-6 lg:col-span-2 overflow-hidden relative"
+          >
+            <div
+              class="absolute inset-0 opacity-45"
+              style="
+                background-image: linear-gradient(
+                    180deg,
+                    rgba(5, 7, 18, 0.78),
+                    rgba(5, 7, 18, 0.25)
+                  ),
+                  url('https://source.unsplash.com/1600x1000/?friends-talking,smiling-people');
+                background-size: cover;
+                background-position: center;
+              "
+              aria-hidden="true"
+            ></div>
+            <div class="relative">
+              <h3 class="text-lg font-semibold">コミュニティ</h3>
+              <p class="mt-2 text-white/75 leading-relaxed">
+                一人だと続かない。
+                <span class="text-white/90 font-medium"
+                  >仲間がいると、自然に続く。</span
+                >
+                学習仲間・会話イベント・質問チャンネルで、いつでも前に進める。
+              </p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Language Exchange</span
+                >
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Weekly Events</span
+                >
+                <span
+                  class="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >Ask & Learn</span
+                >
+              </div>
+            </div>
+          </article>
+
+          <!-- Review card -->
+          <article class="reveal glass card-tilt rounded-3xl p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-sm font-semibold">レビュー</h3>
+                <p class="mt-1 text-xs text-white/65">“楽しいのに伸びる”の声。</p>
+              </div>
+              <div class="flex items-center gap-1 text-xs text-white/75">
+                <span aria-hidden="true">★</span><span>4.8</span>
+              </div>
+            </div>
+            <div class="mt-4 text-sm leading-relaxed text-white/80">
+              “毎回話すので、怖さが消えました。日本の面接にも自信がついた！”
+            </div>
+            <div class="mt-4 flex items-center gap-3">
+              <img
+                src="https://source.unsplash.com/200x200/?portrait,smiling"
+                alt="受講者の写真"
+                class="h-10 w-10 rounded-full object-cover border border-white/15"
+                loading="lazy"
+              />
+              <div class="leading-tight">
+                <div class="text-sm font-semibold">Mia</div>
+                <div class="text-xs text-white/60">Taiwan • N3 목표</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Why continue -->
+      <section class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="grid gap-6 lg:grid-cols-12 lg:items-center">
+          <div class="lg:col-span-5 reveal">
+            <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+              なぜ続く？ <span class="text-white/60 font-normal">Why it sticks</span>
+            </h2>
+            <p class="mt-4 text-white/75 leading-relaxed">
+              継続は才能じゃない。設計でつくれる。
+              <span class="text-white/90 font-medium"
+                >“仲間・実感・小さな成功”</span
+              >
+              を積み重ねることで、学習が習慣になります。
+            </p>
+
+            <div class="mt-6 grid gap-3">
+              <div class="glass rounded-2xl p-4">
+                <div class="text-sm font-semibold">😊 Fun first</div>
+                <div class="mt-1 text-sm text-white/70">
+                  会話→成功体験→モチベ維持
+                </div>
+              </div>
+              <div class="glass rounded-2xl p-4">
+                <div class="text-sm font-semibold">📈 Visible progress</div>
+                <div class="mt-1 text-sm text-white/70">
+                  診断＆データで成長が見える
+                </div>
+              </div>
+              <div class="glass rounded-2xl p-4">
+                <div class="text-sm font-semibold">🤝 Community</div>
+                <div class="mt-1 text-sm text-white/70">
+                  仲間がいるから、続けられる
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 reveal">
+            <div class="glass-strong edge-glow card-tilt rounded-3xl overflow-hidden">
+              <div class="grid sm:grid-cols-2">
+                <img
+                  src="https://source.unsplash.com/1400x1200/?classroom,international-students,smiling"
+                  alt="海外学習者が楽しく学んでいる写真"
+                  class="h-56 sm:h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div class="p-6">
+                  <div
+                    class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/75"
+                  >
+                    <span
+                      class="inline-block h-1.5 w-1.5 rounded-full bg-violet-300"
+                      aria-hidden="true"
+                    ></span>
+                    Community-driven Learning
+                  </div>
+                  <h3 class="mt-4 text-xl font-semibold">
+                    “話す”が中心だから、伸びる
+                  </h3>
+                  <p class="mt-3 text-white/75 leading-relaxed">
+                    受講者同士の会話で、語彙と表現が自然に増える。
+                    レッスン後は“今日の10単語”で復習して、忘れない。
+                  </p>
+                  <div class="mt-5 flex gap-3">
+                    <a
+                      href="#trial"
+                      class="btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+                    >
+                      無料体験へ
+                    </a>
+                    <a
+                      href="#diagnosis"
+                      class="btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/20 to-violet-400/20 hover:from-cyan-300/25 hover:to-violet-400/25"
+                    >
+                      診断する
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-3 text-xs text-white/55">
+              ※人物写真はUnsplashのランダム画像です（実在URL）。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Flow -->
+      <section class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal">
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            学習の流れ <span class="text-white/60 font-normal">3 steps</span>
+          </h2>
+          <p class="mt-3 text-white/70">
+            迷わない。続く。伸びる。最短ルートで日本語を身につける。
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          <div class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-xs text-white/60">STEP 1</div>
+            <div class="mt-2 text-lg font-semibold">無料レベル診断（3分）</div>
+            <p class="mt-2 text-white/75 leading-relaxed">
+              目的・生活シーン・レベルから、あなた専用ルートを提案。
+            </p>
+          </div>
+
+          <div class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-xs text-white/60">STEP 2</div>
+            <div class="mt-2 text-lg font-semibold">少人数クラスで会話</div>
+            <p class="mt-2 text-white/75 leading-relaxed">
+              “使える日本語”を、毎回の会話で体に入れる。
+            </p>
+          </div>
+
+          <div class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-xs text-white/60">STEP 3</div>
+            <div class="mt-2 text-lg font-semibold">成果が見える</div>
+            <p class="mt-2 text-white/75 leading-relaxed">
+              ストリーク・XP・復習で、成長を可視化して継続。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Courses -->
+      <section id="courses" class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal">
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            コース紹介 <span class="text-white/60 font-normal">Courses</span>
+          </h2>
+          <p class="mt-3 text-white/70">
+            目的に合わせて、最短で伸びる。必要なスキルだけに集中できます。
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-sm font-semibold">会話 / Conversation</div>
+            <p class="mt-2 text-sm text-white/70">
+              日常・旅行・友達との会話を自然に。
+            </p>
+            <div class="mt-4 rounded-2xl overflow-hidden border border-white/10">
+              <img
+                src="https://source.unsplash.com/1200x900/?friends,coffee,talking"
+                alt="カフェで会話する人たち"
+                class="h-28 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </article>
+
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-sm font-semibold">JLPT / Exam</div>
+            <p class="mt-2 text-sm text-white/70">
+              N5〜N1。頻出ポイントを最短反復。
+            </p>
+            <div class="mt-4 rounded-2xl overflow-hidden border border-white/10">
+              <img
+                src="https://source.unsplash.com/1200x900/?study,notebook,kanji"
+                alt="ノートで勉強している写真"
+                class="h-28 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </article>
+
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-sm font-semibold">発音 / Pronunciation</div>
+            <p class="mt-2 text-sm text-white/70">
+              イントネーションを“見える化”して改善。
+            </p>
+            <div class="mt-4 rounded-2xl overflow-hidden border border-white/10">
+              <img
+                src="https://source.unsplash.com/1200x900/?microphone,technology,audio"
+                alt="音声・テクノロジーの写真"
+                class="h-28 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </article>
+
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="text-sm font-semibold">仕事 / Business</div>
+            <p class="mt-2 text-sm text-white/70">
+              敬語・面接・メール。現場で使える日本語。
+            </p>
+            <div class="mt-4 rounded-2xl overflow-hidden border border-white/10">
+              <img
+                src="https://source.unsplash.com/1200x900/?office,meeting,smiling"
+                alt="仕事のミーティングの写真"
+                class="h-28 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Trust / Stats -->
+      <section class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal glass-strong edge-glow rounded-3xl p-6 sm:p-8">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+                実績・信頼 <span class="text-white/60 font-normal">Proof</span>
+              </h2>
+              <p class="mt-3 text-white/70 leading-relaxed">
+                まずは“続く設計”で、学習の成功体験を積み上げる。
+              </p>
+            </div>
+            <div class="grid grid-cols-3 gap-3 w-full lg:w-auto">
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div class="text-xs text-white/60">Active learners</div>
+                <div class="mt-1 text-xl font-semibold">12k+</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div class="text-xs text-white/60">Weekly classes</div>
+                <div class="mt-1 text-xl font-semibold">180+</div>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div class="text-xs text-white/60">Avg rating</div>
+                <div class="mt-1 text-xl font-semibold">4.8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reviews -->
+      <section id="reviews" class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal">
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            レビュー <span class="text-white/60 font-normal">Reviews</span>
+          </h2>
+          <p class="mt-3 text-white/70">
+            “楽しいから続く”が、結果につながる。
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          <!-- Review 1 -->
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <img
+                src="https://source.unsplash.com/200x200/?portrait,woman,smiling"
+                alt="受講者の写真"
+                class="h-12 w-12 rounded-full object-cover border border-white/15"
+                loading="lazy"
+              />
+              <div>
+                <div class="text-sm font-semibold">Alya</div>
+                <div class="text-xs text-white/60">Indonesia • Conversation</div>
+              </div>
+            </div>
+            <div class="mt-4 text-white/80 leading-relaxed">
+              “話す時間が多いから、自然に口が動くようになりました。先生も仲間も優しい！”
+            </div>
+            <div class="mt-4 text-xs text-white/70">★★★★★ 5.0</div>
+          </article>
+
+          <!-- Review 2 -->
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <img
+                src="https://source.unsplash.com/200x200/?portrait,man,smiling"
+                alt="受講者の写真"
+                class="h-12 w-12 rounded-full object-cover border border-white/15"
+                loading="lazy"
+              />
+              <div>
+                <div class="text-sm font-semibold">Kevin</div>
+                <div class="text-xs text-white/60">USA • JLPT N3</div>
+              </div>
+            </div>
+            <div class="mt-4 text-white/80 leading-relaxed">
+              “学習ルートが明確で、迷わない。短い復習が毎日できて助かる。”
+            </div>
+            <div class="mt-4 text-xs text-white/70">★★★★★ 4.9</div>
+          </article>
+
+          <!-- Review 3 -->
+          <article class="reveal glass card-tilt rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <img
+                src="https://source.unsplash.com/200x200/?portrait,student,smile"
+                alt="受講者の写真"
+                class="h-12 w-12 rounded-full object-cover border border-white/15"
+                loading="lazy"
+              />
+              <div>
+                <div class="text-sm font-semibold">Mia</div>
+                <div class="text-xs text-white/60">Taiwan • Business</div>
+              </div>
+            </div>
+            <div class="mt-4 text-white/80 leading-relaxed">
+              “面接の敬語がすごく実用的。言い換えも学べて自信がつきました。”
+            </div>
+            <div class="mt-4 text-xs text-white/70">★★★★★ 4.8</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal">
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            料金 <span class="text-white/60 font-normal">Pricing</span>
+          </h2>
+          <p class="mt-3 text-white/70">
+            まずは無料で体験。必要になったらProへ。
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-4 lg:grid-cols-2">
+          <article class="reveal glass card-tilt rounded-3xl p-7">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="text-lg font-semibold">Free</h3>
+                <p class="mt-1 text-sm text-white/70">
+                  診断＆学習の入り口。まず試したい人へ。
+                </p>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-white/60">from</div>
+                <div class="text-2xl font-semibold">¥0</div>
+              </div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm text-white/75">
+              <li>• 無料レベル診断（3分）</li>
+              <li>• 今日の単語（10個）</li>
+              <li>• 学習ストリーク</li>
+              <li>• コミュニティ閲覧</li>
+            </ul>
+            <a
+              href="#diagnosis"
+              class="mt-6 inline-flex w-full justify-center btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+            >
+              無料で始める
+            </a>
+          </article>
+
+          <article class="reveal glass-strong edge-glow card-tilt rounded-3xl p-7 relative overflow-hidden">
+            <div
+              class="absolute -top-24 -right-24 h-64 w-64 rounded-full"
+              style="
+                background: radial-gradient(
+                  closest-side,
+                  rgba(34, 211, 238, 0.35),
+                  transparent 70%
+                );
+                filter: blur(1px);
+              "
+              aria-hidden="true"
+            ></div>
+            <div
+              class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full"
+              style="
+                background: radial-gradient(
+                  closest-side,
+                  rgba(124, 58, 237, 0.35),
+                  transparent 70%
+                );
+                filter: blur(1px);
+              "
+              aria-hidden="true"
+            ></div>
+
+            <div class="relative">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">Pro</h3>
+                  <p class="mt-1 text-sm text-white/70">
+                    会話・発音・JLPT・仕事を本気で伸ばす。
+                  </p>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs text-white/60">from</div>
+                  <div class="text-2xl font-semibold">¥4,980</div>
+                </div>
+              </div>
+
+              <ul class="mt-5 space-y-2 text-sm text-white/75">
+                <li>• 少人数会話クラス</li>
+                <li>• 発音トレーニング（波形UI）</li>
+                <li>• JLPTロードマップ（N5〜N1）</li>
+                <li>• 仕事日本語（敬語/面接/メール）</li>
+                <li>• 復習＆課題のフィードバック</li>
+              </ul>
+
+              <a
+                href="#trial"
+                class="mt-6 inline-flex w-full justify-center btn-neon rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/25 to-violet-400/25 hover:from-cyan-300/30 hover:to-violet-400/30"
+              >
+                無料体験で確認する
+              </a>
+              <p class="mt-3 text-xs text-white/55">
+                ※価格は例です。公開時に調整してください。
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CTA Forms -->
+      <section class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="grid gap-4 lg:grid-cols-2">
+          <!-- Diagnosis -->
+          <div id="diagnosis" class="reveal glass-strong edge-glow rounded-3xl p-7">
+            <h3 class="text-xl font-semibold">無料レベル診断（3分）</h3>
+            <p class="mt-2 text-white/75 leading-relaxed">
+              目的・生活シーン・現在のレベルを入力するだけ。あなた専用の学習ルートを提案します。
+            </p>
+
+            <form class="mt-6 grid gap-3" action="#" method="post">
+              <label class="text-sm text-white/80">
+                Email
+                <input
+                  type="email"
+                  required
+                  class="mt-2 w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none"
+                  placeholder="you@example.com"
+                />
+              </label>
+
+              <label class="text-sm text-white/80">
+                Goal
+                <select
+                  class="mt-2 w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white focus:outline-none"
+                >
+                  <option value="conversation">Conversation（日常会話）</option>
+                  <option value="jlpt">JLPT</option>
+                  <option value="business">Business（仕事）</option>
+                  <option value="travel">Travel（旅行）</option>
+                </select>
+              </label>
+
+              <button
+                type="submit"
+                class="btn-neon mt-1 inline-flex justify-center rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/25 to-violet-400/25 hover:from-cyan-300/30 hover:to-violet-400/30"
+              >
+                診断を送信（無料）
+              </button>
+
+              <p class="text-xs text-white/55">
+                ※このデモでは送信先は未設定です。実運用ではフォーム送信先を接続してください。
+              </p>
+            </form>
+          </div>
+
+          <!-- Trial -->
+          <div id="trial" class="reveal glass rounded-3xl p-7 overflow-hidden relative">
+            <div
+              class="absolute inset-0 opacity-35"
+              style="
+                background-image: linear-gradient(
+                    180deg,
+                    rgba(5, 7, 18, 0.85),
+                    rgba(5, 7, 18, 0.25)
+                  ),
+                  url('https://source.unsplash.com/1600x1000/?online-meeting,smiling,students');
+                background-size: cover;
+                background-position: center;
+              "
+              aria-hidden="true"
+            ></div>
+            <div class="relative">
+              <h3 class="text-xl font-semibold">無料体験を申し込む</h3>
+              <p class="mt-2 text-white/75 leading-relaxed">
+                まずは1回、雰囲気を体感。会話中心で“使える日本語”を体験できます。
+              </p>
+
+              <form class="mt-6 grid gap-3" action="#" method="post">
+                <label class="text-sm text-white/80">
+                  Name
+                  <input
+                    type="text"
+                    required
+                    class="mt-2 w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none"
+                    placeholder="Your name"
+                  />
+                </label>
+
+                <label class="text-sm text-white/80">
+                  Email
+                  <input
+                    type="email"
+                    required
+                    class="mt-2 w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none"
+                    placeholder="you@example.com"
+                  />
+                </label>
+
+                <label class="text-sm text-white/80">
+                  Preferred time
+                  <select
+                    class="mt-2 w-full rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-white focus:outline-none"
+                  >
+                    <option>Weekday evenings</option>
+                    <option>Weekday mornings</option>
+                    <option>Weekend</option>
+                    <option>Flexible</option>
+                  </select>
+                </label>
+
+                <button
+                  type="submit"
+                  class="btn-neon mt-1 inline-flex justify-center rounded-2xl px-5 py-3 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+                >
+                  無料体験を送信
+                </button>
+
+                <p class="text-xs text-white/55">
+                  ※このデモでは送信先は未設定です。実運用ではフォーム送信先を接続してください。
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="mx-auto max-w-6xl px-4 pb-16 sm:pb-20">
+        <div class="reveal">
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">
+            FAQ <span class="text-white/60 font-normal">よくある質問</span>
+          </h2>
+          <p class="mt-3 text-white/70">
+            不安をゼロにして、安心して始められるように。
+          </p>
+        </div>
+
+        <div class="mt-8 grid gap-3">
+          <div class="faq-item reveal glass rounded-3xl p-5" data-open="false">
+            <button
+              class="w-full flex items-center justify-between gap-4 text-left"
+              aria-expanded="false"
+            >
+              <span class="text-sm font-semibold">英語が苦手でも大丈夫？</span>
+              <span class="chev text-white/70" aria-hidden="true">⌄</span>
+            </button>
+            <div class="faq-panel">
+              <div class="pt-3 text-sm text-white/75 leading-relaxed">
+                はい、大丈夫です。レベル診断で最適化し、必要な範囲で英語サポートも入れます。
+                まずは会話中心で“通じた”体験を作ります。
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item reveal glass rounded-3xl p-5" data-open="false">
+            <button
+              class="w-full flex items-center justify-between gap-4 text-left"
+              aria-expanded="false"
+            >
+              <span class="text-sm font-semibold">どれくらいで話せるようになる？</span>
+              <span class="chev text-white/70" aria-hidden="true">⌄</span>
+            </button>
+            <div class="faq-panel">
+              <div class="pt-3 text-sm text-white/75 leading-relaxed">
+                目標と学習時間によりますが、会話コースは早い人で2〜4週間で“返せる”感覚が出ます。
+                継続の設計で、確実に積み上げます。
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item reveal glass rounded-3xl p-5" data-open="false">
+            <button
+              class="w-full flex items-center justify-between gap-4 text-left"
+              aria-expanded="false"
+            >
+              <span class="text-sm font-semibold">JLPT対策はどのレベルまで？</span>
+              <span class="chev text-white/70" aria-hidden="true">⌄</span>
+            </button>
+            <div class="faq-panel">
+              <div class="pt-3 text-sm text-white/75 leading-relaxed">
+                N5〜N1まで対応する想定です。頻出項目の反復と、弱点補強を組み合わせて最短化します。
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item reveal glass rounded-3xl p-5" data-open="false">
+            <button
+              class="w-full flex items-center justify-between gap-4 text-left"
+              aria-expanded="false"
+            >
+              <span class="text-sm font-semibold">支払い方法は？</span>
+              <span class="chev text-white/70" aria-hidden="true">⌄</span>
+            </button>
+            <div class="faq-panel">
+              <div class="pt-3 text-sm text-white/75 leading-relaxed">
+                例：クレジットカードやオンライン決済に対応できます。公開時に国/地域に合わせて最適化します。
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item reveal glass rounded-3xl p-5" data-open="false">
+            <button
+              class="w-full flex items-center justify-between gap-4 text-left"
+              aria-expanded="false"
+            >
+              <span class="text-sm font-semibold">忙しくても続けられる？</span>
+              <span class="chev text-white/70" aria-hidden="true">⌄</span>
+            </button>
+            <div class="faq-panel">
+              <div class="pt-3 text-sm text-white/75 leading-relaxed">
+                毎日10分の“今日の単語”と、週1回の復習デーで設計しています。小さく始めて大きく伸ばす。
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="mx-auto max-w-6xl px-4 pb-14">
+        <div class="glass rounded-3xl p-7">
+          <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div>
+              <div class="text-sm font-semibold">NEO NIHONGO ACADEMY</div>
+              <p class="mt-2 text-sm text-white/70 leading-relaxed">
+                Learn Japanese with joy, structure, and a future-ready system.
+              </p>
+              <div class="mt-4 flex gap-2">
+                <a
+                  href="#diagnosis"
+                  class="btn-neon inline-flex rounded-xl px-4 py-2 text-sm font-semibold border border-white/15 bg-white/10 hover:bg-white/12"
+                >
+                  無料診断
+                </a>
+                <a
+                  href="#trial"
+                  class="btn-neon inline-flex rounded-xl px-4 py-2 text-sm font-semibold border border-white/15 bg-gradient-to-r from-cyan-300/20 to-violet-400/20 hover:from-cyan-300/25 hover:to-violet-400/25"
+                >
+                  無料体験
+                </a>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 text-sm">
+              <div>
+                <div class="text-white/85 font-semibold">Links</div>
+                <ul class="mt-3 space-y-2 text-white/70">
+                  <li><a class="hover:text-white transition" href="#features">Features</a></li>
+                  <li><a class="hover:text-white transition" href="#courses">Courses</a></li>
+                  <li><a class="hover:text-white transition" href="#reviews">Reviews</a></li>
+                  <li><a class="hover:text-white transition" href="#pricing">Pricing</a></li>
+                </ul>
+              </div>
+              <div>
+                <div class="text-white/85 font-semibold">Legal</div>
+                <ul class="mt-3 space-y-2 text-white/70">
+                  <li><a class="hover:text-white transition" href="#">利用規約</a></li>
+                  <li><a class="hover:text-white transition" href="#">プライバシー</a></li>
+                  <li><a class="hover:text-white transition" href="#">お問い合わせ</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-xs text-white/55">
+              © <span id="year"></span> NEO NIHONGO ACADEMY. All rights reserved.
+            </p>
+            <p class="text-xs text-white/55">
+              Images: Unsplash Source URLs (random, real).
+            </p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <!-- Three.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+    <script>
+      // Year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Fade-in Up
+      (() => {
+        const els = Array.from(document.querySelectorAll(".reveal"));
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add("in");
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { threshold: 0.12 }
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+
+      // FAQ accordion (a11y)
+      (() => {
+        const items = Array.from(document.querySelectorAll(".faq-item"));
+        items.forEach((item) => {
+          const btn = item.querySelector("button");
+          const panel = item.querySelector(".faq-panel");
+          if (!btn || !panel) return;
+
+          btn.addEventListener("click", () => {
+            const isOpen = item.getAttribute("data-open") === "true";
+            // close others (optional; feels premium & clean)
+            items.forEach((it) => {
+              it.setAttribute("data-open", "false");
+              const b = it.querySelector("button");
+              if (b) b.setAttribute("aria-expanded", "false");
+            });
+
+            item.setAttribute("data-open", String(!isOpen));
+            btn.setAttribute("aria-expanded", String(!isOpen));
+          });
+        });
+      })();
+
+      // Three.js neon cube (cursor-follow slow rotate)
+      (() => {
+        const canvas = document.getElementById("cubeCanvas");
+        const wrap = document.getElementById("cubeWrap");
+        if (!canvas || !wrap || !window.THREE) return;
+
+        const isMobile = matchMedia("(max-width: 640px)").matches;
+        const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+        camera.position.set(0, 0, 4.2);
+
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance",
+        });
+
+        // Pixel ratio: keep it light on mobile
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.2 : 1.6));
+
+        // Lights
+        const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+        scene.add(ambient);
+
+        const p1 = new THREE.PointLight(0x22d3ee, 1.2, 10);
+        p1.position.set(2, 2, 3);
+        scene.add(p1);
+
+        const p2 = new THREE.PointLight(0x7c3aed, 1.0, 10);
+        p2.position.set(-2, -1, 3);
+        scene.add(p2);
+
+        // Cube: wireframe + edges glow-ish
+        const size = isMobile ? 1.15 : 1.35;
+        const geo = new THREE.BoxGeometry(size, size, size);
+
+        const wireMat = new THREE.MeshStandardMaterial({
+          color: 0x60a5fa,
+          emissive: 0x1d4ed8,
+          emissiveIntensity: 0.55,
+          metalness: 0.15,
+          roughness: 0.25,
+          transparent: true,
+          opacity: 0.22,
+          wireframe: true,
+        });
+
+        const cubeWire = new THREE.Mesh(geo, wireMat);
+        scene.add(cubeWire);
+
+        const edgesGeo = new THREE.EdgesGeometry(geo);
+        const edgesMat = new THREE.LineBasicMaterial({
+          color: 0x22d3ee,
+          transparent: true,
+          opacity: 0.95,
+        });
+        const cubeEdges = new THREE.LineSegments(edgesGeo, edgesMat);
+        scene.add(cubeEdges);
+
+        // Inner glow cube
+        const innerMat = new THREE.MeshStandardMaterial({
+          color: 0x7c3aed,
+          emissive: 0x7c3aed,
+          emissiveIntensity: 0.65,
+          metalness: 0.1,
+          roughness: 0.35,
+          transparent: true,
+          opacity: 0.08,
+        });
+        const inner = new THREE.Mesh(geo, innerMat);
+        scene.add(inner);
+
+        // Resize
+        function resize() {
+          const rect = wrap.getBoundingClientRect();
+          const w = Math.max(10, rect.width);
+          const h = Math.max(10, rect.height);
+
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+        resize();
+
+        let targetX = 0;
+        let targetY = 0;
+
+        function onMove(e) {
+          const rect = wrap.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const mx = (e.clientX - cx) / rect.width;
+          const my = (e.clientY - cy) / rect.height;
+
+          targetY = mx * 0.9;
+          targetX = my * 0.9;
+        }
+
+        // Only track pointer if motion allowed
+        if (!prefersReduced) {
+          window.addEventListener("pointermove", onMove, { passive: true });
+        }
+
+        window.addEventListener("resize", resize);
+
+        // Animation
+        let raf = 0;
+        const rot = { x: 0, y: 0 };
+
+        function animate() {
+          raf = requestAnimationFrame(animate);
+
+          // Slow drift even without pointer
+          const drift = 0.0025;
+
+          // Lerp to target (slow)
+          rot.x += (targetX - rot.x) * 0.04;
+          rot.y += (targetY - rot.y) * 0.04;
+
+          cubeWire.rotation.x += drift;
+          cubeWire.rotation.y += drift * 1.1;
+
+          cubeEdges.rotation.x = cubeWire.rotation.x + rot.x * 0.8;
+          cubeEdges.rotation.y = cubeWire.rotation.y + rot.y * 0.8;
+
+          inner.rotation.x = cubeWire.rotation.x + rot.x * 0.55;
+          inner.rotation.y = cubeWire.rotation.y + rot.y * 0.55;
+
+          // Subtle pulsing opacity (premium feel)
+          const t = performance.now() * 0.001;
+          wireMat.opacity = 0.18 + Math.sin(t * 1.2) * 0.03;
+          edgesMat.opacity = 0.85 + Math.sin(t * 1.6) * 0.1;
+
+          renderer.render(scene, camera);
+        }
+
+        // Reduce motion: keep static, still render once
+        if (prefersReduced) {
+          renderer.render(scene, camera);
+        } else {
+          animate();
+        }
+
+        // Cleanup on page unload
+        window.addEventListener("beforeunload", () => {
+          cancelAnimationFrame(raf);
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("resize", resize);
+          geo.dispose();
+          edgesGeo.dispose();
+          wireMat.dispose();
+          edgesMat.dispose();
+          innerMat.dispose();
+          renderer.dispose();
+        });
+      })();
+    </script>
+  </body>
+</html>
